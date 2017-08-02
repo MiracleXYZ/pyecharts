@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 #coding=utf-8
+from __future__ import unicode_literals
 
 from pyecharts import Kline
 
@@ -45,5 +46,12 @@ def test_kline():
     # kline_1
     kline = Kline("K 线图示例")
     kline.add("日K", ["2017/7/{}".format(i + 1) for i in range(31)], v1, mark_point=["max"], is_datazoom_show=True)
+    kline.show_config()
+    kline.render()
+
+    # kline_2
+    kline = Kline("K 线图示例")
+    kline.add("日K", ["2017/7/{}".format(i + 1) for i in range(31)], v1, mark_point=["max"],
+              is_datazoom_show=True, datazoom_orient='vertical')
     kline.show_config()
     kline.render()

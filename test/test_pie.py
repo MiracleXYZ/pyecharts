@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 #coding=utf-8
+from __future__ import unicode_literals
 
 from pyecharts import Pie
 
@@ -21,7 +22,7 @@ def test_pie():
             legend_pos='left')
     pie.show_config()
     pie.render()
-    #
+
     # pie_2
     attr = ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
     v1 = [11, 12, 13, 10, 10, 10]

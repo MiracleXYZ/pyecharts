@@ -6,8 +6,8 @@ from pyecharts.option import get_all_options
 
 class EffectScatter(Scatter):
     """
-    <<< 带有涟漪特效动画的散点图 >>>
-    利用动画特效可以将某些想要突出的数据进行视觉突出。
+    <<< EffectScatter chart >>>
+    The scatter graph with ripple animation. The special animation effect can visually highlights some data.
     """
     def __init__(self, title="", subtitle="", **kwargs):
         super(EffectScatter, self).__init__(title, subtitle, **kwargs)
@@ -21,13 +21,14 @@ class EffectScatter(Scatter):
         """
 
         :param name:
-            图例名称
+            Series name used for displaying in tooltip and filtering with legend,
+            or updaing data and configuration with setOption.
         :param x_axis:
-            x 坐标轴数据
+            data of xAxis
         :param y_axis:
-            y 坐标轴数据
+            data of yAxis
         :param symbol_size:
-            标记图形大小
+            symbol size
         :param kwargs:
         """
         if isinstance(x_value, list) and isinstance(y_value, list):
@@ -36,7 +37,7 @@ class EffectScatter(Scatter):
             chart = get_all_options(**kwargs)
             xaxis, yaxis = chart['xy_axis']
             self._option.update(xAxis=xaxis, yAxis=yaxis)
-            self._option.get('legend').get('data').append(name)
+            self._option.get('legend')[0].get('data').append(name)
             self._option.get('series').append({
                 "type": "effectScatter",
                 "name": name,
@@ -46,6 +47,7 @@ class EffectScatter(Scatter):
                 "symbolSize": symbol_size,
                 "data": [list(z) for z in zip(x_value, y_value)],
                 "label": chart['label'],
+                "indexflag": self._option.get('_index_flag')
             })
             self._legend_visualmap_colorlst(**kwargs)
         else:

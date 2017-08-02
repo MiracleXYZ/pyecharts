@@ -6,8 +6,9 @@ from pyecharts.option import get_all_options
 
 class Pie(Base):
     """
-    <<< 饼图 >>>
-    饼图主要用于表现不同类目的数据在总和中的占比。每个的弧度表示数据数量的比例。
+    <<< Pie chart >>>
+    The pie chart is mainly used for showing proportion of different categories.
+    Each arc length represents the proportion of data quantity.
     """
     def __init__(self, title="", subtitle="", **kwargs):
         super(Pie, self).__init__(title, subtitle, **kwargs)
@@ -23,21 +24,25 @@ class Pie(Base):
         """
 
         :param name:
-            图例名称
+            Series name used for displaying in tooltip and filtering with legend,
+            or updaing data and configuration with setOption.
         :param attr:
-            属性名称
+            name of attribute
         :param value:
-            属性所对应的值
+            value of attribute
         :param radius:
-            饼图的半径，数组的第一项是内半径，第二项是外半径
-            默认设置成百分比，相对于容器高宽中较小的一项的一半
+            Radius of Pie chart, the first of which is inner radius, and the second is outer radius.
+            Percentage is supported. When set in percentage,
+            it's relative to the smaller size between height and width of the container.
         :param center:
-            饼图的中心（圆心）坐标，数组的第一项是横坐标，第二项是纵坐标
-            默认设置成百分比，设置成百分比时第一项是相对于容器宽度，第二项是相对于容器高度
+            Center position of Pie chart, the first of which is the horizontal position,
+            and the second is the vertical position.
+            Percentage is supported. When set in percentage, the item is relative to the container width,
+            and the second item to the height.
         :param rosetype:
-            是否展示成南丁格尔图，通过半径区分数据大小，有'radius'和'area'两种模式。默认为'radius'
-            radius：扇区圆心角展现数据的百分比，半径展现数据的大小
-            area：所有扇区圆心角相同，仅通过半径展现数据大小
+            Whether to show as Nightingale chart, which distinguishs data through radius. There are 2 optional modes:
+            'radius' Use central angle to show the percentage of data, radius to show data size.
+            'area' All the sectors will share the same central angle, the data size is shown only through radiuses.
         :param kwargs:
         """
         if isinstance(attr, list) and isinstance(value, list):
@@ -63,9 +68,11 @@ class Pie(Base):
                 if rosetype not in ("radius", "area"):
                     rosetype = "radius"
             for a in attr:
-                self._option.get('legend').get('data').append(a)
-            _dset = set(self._option.get('legend').get('data'))
-            self._option.get('legend').update(data=list(_dset))
+                self._option.get('legend')[0].get('data').append(a)
+            _dlst = self._option.get('legend')[0].get('data')
+            _dset = list(set(_dlst))
+            _dset.sort(key=_dlst.index)
+            self._option.get('legend')[0].update(data=list(_dset))
             self._option.get('series').append({
                 "type": "pie",
                 "name": name,
@@ -74,6 +81,7 @@ class Pie(Base):
                 "center": [_cmin, _cmax],
                 "roseType": rosetype,
                 "label": chart['label'],
+                "indexflag": self._option.get('_index_flag')
             })
             self._legend_visualmap_colorlst(**kwargs)
         else:

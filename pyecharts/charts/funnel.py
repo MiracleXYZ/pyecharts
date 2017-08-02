@@ -6,7 +6,7 @@ from pyecharts.option import get_all_options
 
 class Funnel(Base):
     """
-    <<< 漏斗图 >>>
+    <<< Funnel chart >>>
     """
     def __init__(self, title="", subtitle="", **kwargs):
         super(Funnel, self).__init__(title, subtitle, **kwargs)
@@ -18,11 +18,12 @@ class Funnel(Base):
         """
 
         :param name:
-            图例名称
+            Series name used for displaying in tooltip and filtering with legend,
+            or updaing data and configuration with setOption.
         :param attr:
-            属性名称
+            name of attribute
         :param value:
-            属性所对应的值
+            value of attribute
         :param kwargs:
         """
         if isinstance(attr, list) and isinstance(value, list):
@@ -33,14 +34,14 @@ class Funnel(Base):
                 _name, _value = data
                 _data.append({"name": _name, "value": _value})
             for a in attr:
-                self._option.get('legend').get('data').append(a)
-            _dset = set(self._option.get('legend').get('data'))
-            self._option.get('legend').update(data=list(_dset))
+                self._option.get('legend')[0].get('data').append(a)
+            _dset = set(self._option.get('legend')[0].get('data'))
+            self._option.get('legend')[0].update(data=list(_dset))
             self._option.get('series').append({
                 "type": "funnel",
                 "name": name,
                 "data": _data,
-                "label": chart['label'],
+                "label": chart['label']
             })
             self._legend_visualmap_colorlst(**kwargs)
         else:
